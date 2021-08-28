@@ -4,6 +4,9 @@ const dotenv = require('dotenv');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
+const authRoute = require('./routes/auth');
+const userRoute = require('./routes/users');
+
 const app = express();
 
 dotenv.config();
@@ -17,8 +20,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
 
-app.get('/', (req, res) => {
-	res.send('home page');
-});
+app.use('/api/auth', authRoute);
+app.use('/api/users', userRoute);
 
 app.listen(3333);
