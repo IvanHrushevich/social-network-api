@@ -18,6 +18,31 @@ router.post('/register', async (req, res) => {
 		res.status(200).json(user);
 	} catch (err) {
 		console.log(`err`, err);
+		return res.status(500).json(err);
+	}
+});
+
+router.post('/login', async (req, res) => {
+	try {
+		const user = await User.findOne({ email: req.body.email });
+
+		if (!user) {
+			return res.status(404).json('user not found');
+		}
+
+		const isValidPassword = await bcrypt.compare(
+			req.body.password,
+			user.password
+		);
+
+		if (!isValidPassword) {
+			return res.status(400).json('wrong password');
+		}
+
+		res.status(200).json(user);
+	} catch (err) {
+		console.log(`err`, err);
+		return res.status(500).json(err);
 	}
 });
 
